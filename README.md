@@ -1,4 +1,4 @@
-## online_motion_generator
+# online_motion_generator
 ---
 This package provides tools for online motion generation of smooth cartesian and joint-space trajectories for a N-DOF robot.
 ...
