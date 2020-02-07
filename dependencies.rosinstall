@@ -1,0 +1,4 @@
+- git:
+    local-name: quatDS
+    uri: https://github.com/nbfigueroa/quatDS-lib.git
+    version: master
