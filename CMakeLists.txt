@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(robot_motion_generation)
+project(online_motion_generator)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -29,8 +29,8 @@ include_directories(include ${catkin_INCLUDE_DIRS} ${INCLUDE_DIR})
 
 
 
-set(H_FILES ${INCLUDE_DIR}/robot_motion_generation/CDDynamics.h
-            ${INCLUDE_DIR}/robot_motion_generation/angular_velocity.h
+set(H_FILES ${INCLUDE_DIR}/online_motion_generator/CDDynamics.h
+            ${INCLUDE_DIR}/online_motion_generator/angular_velocity.h
 )
 
 set(S_FILES  ${SRC_DIR}/CDDynamics.cpp
