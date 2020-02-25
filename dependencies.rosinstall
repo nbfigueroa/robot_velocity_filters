@@ -2,3 +2,13 @@
     local-name: quatDS
     uri: https://github.com/nbfigueroa/quatDS-lib.git
     version: master
+
+- git:
+    local-name: mathlib
+    uri: git@github.com:epfl-lasa/mathlib.git
+    
+- git:
+    local-name: fast-gmm
+    uri: https://github.com/epfl-lasa/fast-gmm.git
+    version: devel  
+    
