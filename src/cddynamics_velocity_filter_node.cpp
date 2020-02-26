@@ -30,7 +30,7 @@ int main(int argc, char **argv)
   std::string input_velocity_topic_name;
   std::string output_velocity_topic_name;
   double lin_velocity_limit (0.3);
-  double ang_velocity_limit (0.2);
+  double ang_velocity_limit (0.3);
 
   // Getting parameters from launch file or parameter server (uploaded through yaml file)
   if (!nh.getParam("input_state_topic_name", input_state_topic_name))   {
