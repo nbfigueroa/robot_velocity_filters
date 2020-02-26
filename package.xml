@@ -41,11 +41,18 @@
   <!--   <test_depend>gtest</test_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
 
-  <build_depend>    roscpp     </build_depend>
-  <run_depend>      roscpp     </run_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>mathlib</build_depend>
+  <build_depend>sgaussians</build_depend>
 
-  <build_depend>    cmake_modules     </build_depend>
-  <run_depend>      cmake_modules     </run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>rospy</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>mathlib</run_depend>
+  <run_depend>sgaussians</run_depend>
+
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

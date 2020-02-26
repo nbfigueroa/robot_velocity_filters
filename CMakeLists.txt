@@ -1,44 +1,58 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(online_motion_generator)
 
-## Find catkin macros and libraries
-## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
-## is used, also find other catkin packages
-find_package(catkin REQUIRED roscpp cmake_modules)
-
+## Add support for C++11, supported in ROS Kinetic and newer
+add_definitions(-std=c++11)
 set(CMAKE_CXX_FLAGS "-O2 -O3 -std=c++11 -Wall -Wno-deprecated-declarations -Wno-unused-variable -Wno-reorder")
 
-find_package(Eigen REQUIRED)
+
+
+## Find catkin macros and libraries
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  rospy
+  std_msgs
+  mathlib
+  sgaussians
+)
+
+###################################
+## catkin specific configuration ##
+###################################
 
 catkin_package(
-  CATKIN_DEPENDS
-    roscpp
-    cmake_modules
-  INCLUDE_DIRS include
-  LIBRARIES ${PROJECT_NAME}
-  DEPENDS Eigen
+ INCLUDE_DIRS include
+ LIBRARIES online_motion_generator
+ CATKIN_DEPENDS roscpp rospy std_msgs mathlib sgaussians
 )
 
 
+###########
+## Build ##
+###########
 
+## Specify locations of header and source files
 set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-
-include_directories(include ${catkin_INCLUDE_DIRS} ${INCLUDE_DIR})
-
-
-
-set(H_FILES ${INCLUDE_DIR}/online_motion_generator/CDDynamics.h
-            ${INCLUDE_DIR}/online_motion_generator/angular_velocity.h
-)
-
-set(S_FILES  ${SRC_DIR}/CDDynamics.cpp
-)
-
-include_directories(${catkin_INCLUDE_DIRS})
+set(H_FILES ${INCLUDE_DIR}/velocity_filters/CDDynamics_filter.h)
+set(S_FILES ${SRC_DIR}/velocity_filters/CDDynamics_filter.cpp)
 
 
-add_library(${PROJECT_NAME} ${H_FILES} ${S_FILES} )
-target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
+## Declare the C++ library
+include_directories(include/velocity_filters ${catkin_INCLUDE_DIRS})
+add_library(cddynamics_filter ${H_FILES} ${S_FILES} )
+target_link_libraries(cddynamics_filter ${catkin_LIBRARIES})
 
+
+## Declare C++ executables
+add_executable(cddynamics_velocity_filter_node src/cddynamics_velocity_filter_node.cpp)
+target_link_libraries(cddynamics_velocity_filter_node cddynamics_filter)
+
+
+### ADD Nodes that use the library
+add_dependencies(cddynamics_velocity_filter_node 
+  ${${PROJECT_NAME}_EXPORTED_TARGETS} 
+  ${catkin_EXPORTED_TARGETS})
+
+target_link_libraries(cddynamics_velocity_filter_node cddynamics_filter ${catkin_LIBRARIES} )
