@@ -5,17 +5,23 @@
 # input_state_topic name should contain             -- geometry_msgs::Pose
 # input_velocity_topic_name will write to           -- geometry_msgs::Twist
 # output_velocity_topic_name will write             -- geometry_msgs::Twist
+# linear_velocity_limit will write                  -- double (max velocity in m/s)
+# angular_velocity_limit will write                 -- double (max velocity in rad/s)
 
 	<arg name="input_state_topic_name"           default="/UR10arm/ee_pose"/>
-	<!-- <arg name="input_velocity_topic_name"        default="/UR10arm/desired_twist"/>
-	<arg name="output_velocity_topic_name"       default="/arm/twist_controller/command_twist"/> -->
-	<arg name="input_velocity_topic_name"        default="/arm/twist_controller/command_twist"/>
-	<arg name="output_velocity_topic_name"       default="/UR10arm/desired_twist"/>
+	<arg name="input_velocity_topic_name"        default="/UR10arm/desired_twist"/>
+	<arg name="output_velocity_topic_name"       default="/arm/twist_controller/command_twist"/>
+	<arg name="lin_velocity_limit"               default="0.3"/>
+	<arg name="ang_velocity_limit"               default="0.3"/>
+	<!-- <arg name="input_velocity_topic_name"        default="/arm/twist_controller/command_twist"/>
+	<arg name="output_velocity_topic_name"       default="/UR10arm/desired_twist"/> -->
 
 	<group ns="ds_filter">
 		<param name="input_state_topic_name"      value="$(arg input_state_topic_name)"/>
 		<param name="input_velocity_topic_name"   value="$(arg input_velocity_topic_name)"/>
 		<param name="output_velocity_topic_name"  value="$(arg output_velocity_topic_name)"/>
+		<param name="lin_velocity_limit"          value="$(arg lin_velocity_limit)"/>
+		<param name="ang_velocity_limit"          value="$(arg ang_velocity_limit)"/>
 		<node name="cddynamics_velocity_filter_node" pkg="online_motion_generator" type="cddynamics_velocity_filter_node" output="screen" />
 	</group>
 

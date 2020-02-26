@@ -37,20 +37,20 @@ class CDDynamicsFilter {
 private:
 
 	// Filter variables
-	std::unique_ptr<CDDynamics> CCDyn_filter_;
+	std::unique_ptr<CDDynamics> CCDyn_filter_lin_;
+	std::unique_ptr<CDDynamics> CCDyn_filter_ang_;
 	double                      dt_;
 	double                      Wn_;
 	MathLib::Vector             accLimits_;
 	MathLib::Vector             velLimits_;
 	int                         M_;
-	double                      vlim_;
-	double                      alim_;
-	
+	double                      filt_vlim_, filt_alim_;
+	double                      lin_velocity_limit_;
+	double                      ang_velocity_limit_;
+
 	// ROS variables
 	ros::NodeHandle             nh_;
-	ros::Rate                   loop_rate_;
-
-	ros::Subscriber             sub_real_pose_;
+	ros::Rate                   loop_rate_;	
 	ros::Subscriber             sub_desired_twist_;
 	ros::Publisher              pub_desired_twist_filtered_;
 
@@ -58,16 +58,17 @@ private:
 	std::string                 input_velocity_topic_name_;
 	std::string                 output_velocity_topic_name_;
 
-	geometry_msgs::Pose         msg_real_pose_;
 	geometry_msgs::Twist        msg_desired_twist_;
 	geometry_msgs::Twist        msg_desired_twist_filtered_;
 
 	// Internal Class variables
 	std::mutex                  mutex_;
-	MathLib::Vector             current_state_;
+	MathLib::Vector             initial_;
+	MathLib::Vector             desired_velocity_;
 	MathLib::Vector             desired_velocity_lin_;
 	MathLib::Vector             desired_velocity_ang_;
 	MathLib::Vector             desired_velocity_filtered_lin_;
+	MathLib::Vector             desired_velocity_filtered_ang_;
 
 
 public:
@@ -75,7 +76,9 @@ public:
 	                      	    double frequency,
 						        std::string input_state_topic_name,
 						        std::string input_velocity_topic_name,
-						        std::string output_filtered_velocity_topic_name);
+						        std::string output_filtered_velocity_topic_name,
+						        double lin_velocity_limit,
+        						double ang_velocity_limit);
 
 	bool Init();
 	void Run();
@@ -85,8 +88,8 @@ private:
 	bool InitializeROS();
 	void UpdateCurrentPose(const geometry_msgs::Pose::ConstPtr& msg);
 	void UpdateDesiredTwist(const geometry_msgs::Twist::ConstPtr& msg);
-	void FilterDesiredVelocity();
-	void PublishDesiredVelocity();
+	void FilterDesiredVelocities();
+	void PublishDesiredVelocities();
 
 };
 
