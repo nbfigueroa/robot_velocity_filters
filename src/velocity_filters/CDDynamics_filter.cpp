@@ -28,7 +28,7 @@ CDDynamicsFilter::CDDynamicsFilter(ros::NodeHandle &n,
 	  input_state_topic_name_(input_state_topic_name),
 	  input_velocity_topic_name_(input_velocity_topic_name),
 	  output_velocity_topic_name_(output_velocity_topic_name),
-	  dt_(1 / frequency), Wn_(10), M_(3),
+	  dt_(1 / frequency), Wn_(2.5), M_(3),
 	  filt_vlim_(0.0), filt_alim_(0.0),
 	  lin_velocity_limit_(lin_velocity_limit), ang_velocity_limit_(ang_velocity_limit){
 		
@@ -150,14 +150,20 @@ void CDDynamicsFilter::FilterDesiredVelocities() {
 		CCDyn_filter_lin_->Update();
 		CCDyn_filter_lin_->GetState(desired_velocity_filtered_lin_);
 		
+		/* Cap velocity with maximum limits */
 		if (desired_velocity_filtered_lin_.Norm() > lin_velocity_limit_) 
 			desired_velocity_filtered_lin_ = desired_velocity_filtered_lin_ / desired_velocity_filtered_lin_.Norm() * lin_velocity_limit_;
+
+		/* Cap velocity with desired velocity from motion generator */
+		if (desired_velocity_filtered_lin_.Norm() > desired_velocity_lin_.Norm()) 
+			desired_velocity_filtered_lin_ = desired_velocity_filtered_lin_ / desired_velocity_filtered_lin_.Norm() * desired_velocity_lin_.Norm();
+
 	}		
 
 	ROS_INFO_STREAM( "--------------------------------------------------------");
-	ROS_INFO_STREAM( "Desired linear vel: "  << desired_velocity_lin_(0) << " " << desired_velocity_lin_(1) << " " << desired_velocity_lin_(2));
-	ROS_INFO_STREAM( "Filtered linear vel: " << desired_velocity_filtered_lin_(0) << " " << desired_velocity_filtered_lin_(1) << " " << desired_velocity_filtered_lin_(2));
-
+	// ROS_INFO_STREAM( "Desired linear vel: "  << desired_velocity_lin_(0) << " " << desired_velocity_lin_(1) << " " << desired_velocity_lin_(2));
+	// ROS_INFO_STREAM( "Filtered linear vel: " << desired_velocity_filtered_lin_(0) << " " << desired_velocity_filtered_lin_(1) << " " << desired_velocity_filtered_lin_(2));
+	ROS_INFO_STREAM( "||x_dot|| desired: "  << desired_velocity_lin_.Norm() << " filtered: " << desired_velocity_filtered_lin_.Norm() );
 
 	/******************* Filter the desired angular velocity *******************/	
 	/* Checks to send feasible velocities to low-level controller */
@@ -177,12 +183,20 @@ void CDDynamicsFilter::FilterDesiredVelocities() {
 		CCDyn_filter_ang_->Update();
 		CCDyn_filter_ang_->GetState(desired_velocity_filtered_ang_);
 		
+		/* Cap velocity with maximum limits */
 		if (desired_velocity_filtered_ang_.Norm() > ang_velocity_limit_) 
 			desired_velocity_filtered_ang_ = desired_velocity_filtered_ang_ / desired_velocity_filtered_ang_.Norm() * ang_velocity_limit_;
+
+		/* Cap velocity with desired velocity from motion generator */
+		if (desired_velocity_filtered_ang_.Norm() > desired_velocity_ang_.Norm()) 
+			desired_velocity_filtered_ang_ = desired_velocity_filtered_ang_ / desired_velocity_filtered_ang_.Norm() * desired_velocity_ang_.Norm();
 	}		
 	
-	ROS_INFO_STREAM( "Desired angular vel: "  << desired_velocity_ang_(0) << " " << desired_velocity_ang_(1) << " " << desired_velocity_ang_(2));
-	ROS_INFO_STREAM( "Filtered angular vel: " << desired_velocity_filtered_ang_(0) << " " << desired_velocity_filtered_ang_(1) << " " << desired_velocity_filtered_ang_(2));
+    ROS_INFO_STREAM( "||omega|| desired: "  << desired_velocity_ang_.Norm() << " filtered: " << desired_velocity_filtered_ang_.Norm() );
+
+	// ROS_INFO_STREAM( "Desired angular vel: "  << desired_velocity_ang_(0) << " " << desired_velocity_ang_(1) << " " << desired_velocity_ang_(2));
+	// ROS_INFO_STREAM( "Filtered angular vel: " << desired_velocity_filtered_ang_(0) << " " << desired_velocity_filtered_ang_(1) << " " << desired_velocity_filtered_ang_(2));
+	ROS_INFO_STREAM( "--------------------------------------------------------");
 
 	mutex_.unlock();
 

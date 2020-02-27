@@ -11,8 +11,8 @@
 	<arg name="input_state_topic_name"           default="/UR10arm/ee_pose"/>
 	<arg name="input_velocity_topic_name"        default="/UR10arm/desired_twist"/>
 	<arg name="output_velocity_topic_name"       default="/arm/twist_controller/command_twist"/>
-	<arg name="lin_velocity_limit"               default="0.2"/>
-	<arg name="ang_velocity_limit"               default="0.2"/>
+	<arg name="lin_velocity_limit"               default="0.5"/>
+	<arg name="ang_velocity_limit"               default="0.5"/>
 	<!-- <arg name="input_velocity_topic_name"        default="/arm/twist_controller/command_twist"/>
 	<arg name="output_velocity_topic_name"       default="/UR10arm/desired_twist"/> -->
 
