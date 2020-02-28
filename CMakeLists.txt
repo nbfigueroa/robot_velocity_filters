@@ -35,8 +35,11 @@ catkin_package(
 set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-set(H_FILES ${INCLUDE_DIR}/velocity_filters/CDDynamics_filter.h)
-set(S_FILES ${SRC_DIR}/velocity_filters/CDDynamics_filter.cpp)
+set(H_FILES ${INCLUDE_DIR}/velocity_filters/CDDynamics_twist_filter.h
+			${INCLUDE_DIR}/velocity_filters/CDDynamics_joint_filter.h)
+
+set(S_FILES ${SRC_DIR}/velocity_filters/CDDynamics_twist_filter.cpp
+			${SRC_DIR}/velocity_filters/CDDynamics_joint_filter.cpp)
 
 
 ## Declare the C++ library
@@ -45,14 +48,23 @@ add_library(cddynamics_filter ${H_FILES} ${S_FILES} )
 target_link_libraries(cddynamics_filter ${catkin_LIBRARIES})
 
 
-## Declare C++ executables
-add_executable(cddynamics_velocity_filter_node src/cddynamics_velocity_filter_node.cpp)
-target_link_libraries(cddynamics_velocity_filter_node cddynamics_filter)
+## Declare C++ executable for twist filter node
+add_executable(cddynamics_twist_filter_node src/cddynamics_twist_filter_node.cpp)
+target_link_libraries(cddynamics_twist_filter_node cddynamics_filter)
 
+## Declare C++ executable for joint filter node
+add_executable(cddynamics_joint_filter_node src/cddynamics_joint_filter_node.cpp)
+target_link_libraries(cddynamics_joint_filter_node cddynamics_filter)
 
 ### ADD Nodes that use the library
-add_dependencies(cddynamics_velocity_filter_node 
+add_dependencies(cddynamics_twist_filter_node 
   ${${PROJECT_NAME}_EXPORTED_TARGETS} 
   ${catkin_EXPORTED_TARGETS})
 
-target_link_libraries(cddynamics_velocity_filter_node cddynamics_filter ${catkin_LIBRARIES} )
+add_dependencies(cddynamics_joint_filter_node 
+  ${${PROJECT_NAME}_EXPORTED_TARGETS} 
+  ${catkin_EXPORTED_TARGETS})
+
+
+target_link_libraries(cddynamics_twist_filter_node cddynamics_filter ${catkin_LIBRARIES} )
+target_link_libraries(cddynamics_joint_filter_node cddynamics_filter ${catkin_LIBRARIES} )

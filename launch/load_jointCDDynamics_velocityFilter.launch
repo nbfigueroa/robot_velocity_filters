@@ -1,19 +1,24 @@
-<?xml version="1.0" ?>
+<?xml version="1.0"?>
 <launch>
   
 # Things to Know!
-# input_state_topic name should contain            -- sensor_msgs::JointState
-# input_velocity_topic_name will write to          -- std_msgs::Float64MultiArray
-# output_velocity_topic_name will write to         -- std_msgs::Float64MultiArray
-<group ns="ds1">
-    <param name="input_topic_name"                 value="/lwr/ee_pose"/>
-    <param name="output_topic_name"                value="/ds1/desired_velocity"/>
-    <param name="output_filtered_topic_name"       value="/lwr/joint_controllers/passive_ds_command_vel"/>
-    <rosparam command="load" file="$(find ds_motion_generator)/config/analytic_DS/linear_motion.yml"/>
-    <node name="ds_node" pkg="ds_motion_generator" type="Linear_motionGenerator_node" output="screen"/>
-</group>
+# input_velocity_topic_name will write to           -- geometry_msgs::Twist
+# output_velocity_topic_name will write             -- geometry_msgs::Twist
+# linear_velocity_limit will write                  -- double (max velocity in m/s)
+# angular_velocity_limit will write                 -- double (max velocity in rad/s)
 
-# This node published the desired orientation at the target
-<node pkg="rostopic" type="rostopic" name="angle_setting" args="pub /lwr/joint_controllers/passive_ds_command_orient geometry_msgs/Quaternion '{x: 0.73, y: 0.68, z: -0.012, w: -0.006}' -r 100" />
+
+	<!-- <arg name="input_velocity_topic_name"         default="/arm/joint_group_velocity_controller/command"/>
+	<arg name="output_velocity_topic_name"        default="/UR10arm/desired_joint_velocity"/> -->
+	<arg name="input_velocity_topic_name"         default="/UR10arm/desired_joint_velocity"/>
+	<arg name="output_velocity_topic_name"        default="/arm/joint_group_velocity_controller/command"/>
+	<arg name="joint_velocity_limit"              default="1.0"/>
+
+	<group ns="jointds_filter">
+		<param name="input_velocity_topic_name"   value="$(arg input_velocity_topic_name)"/>
+		<param name="output_velocity_topic_name"  value="$(arg output_velocity_topic_name)"/>
+		<param name="joint_velocity_limit"        value="$(arg joint_velocity_limit)"/>
+		<node name="cddynamics_joint_filter_node" pkg="online_motion_generator" type="cddynamics_joint_filter_node" output="screen" />
+	</group>
 
 </launch>

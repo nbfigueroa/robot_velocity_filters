@@ -14,18 +14,16 @@
  * Public License for more details
  */
 
-#include "CDDynamics_filter.h"
+#include "CDDynamics_twist_filter.h"
 
-CDDynamicsFilter::CDDynamicsFilter(ros::NodeHandle &n,
+CDDynamicsTwistFilter::CDDynamicsTwistFilter(ros::NodeHandle &n,
         double frequency,
-        std::string input_state_topic_name,
         std::string input_velocity_topic_name,
         std::string output_velocity_topic_name, 
         double lin_velocity_limit,
         double ang_velocity_limit)
 	: nh_(n),
 	  loop_rate_(frequency),
-	  input_state_topic_name_(input_state_topic_name),
 	  input_velocity_topic_name_(input_velocity_topic_name),
 	  output_velocity_topic_name_(output_velocity_topic_name),
 	  dt_(1 / frequency), Wn_(2.5), M_(3),
@@ -36,7 +34,7 @@ CDDynamicsFilter::CDDynamicsFilter(ros::NodeHandle &n,
 }
 
 
-bool CDDynamicsFilter::Init() {
+bool CDDynamicsTwistFilter::Init() {
 
 	desired_velocity_lin_.Resize(M_);
 	desired_velocity_ang_.Resize(M_);
@@ -80,11 +78,11 @@ bool CDDynamicsFilter::Init() {
 
 
 
-bool CDDynamicsFilter::InitializeROS() {
+bool CDDynamicsTwistFilter::InitializeROS() {
 
 	/* Subscriber */
 	sub_desired_twist_ = nh_.subscribe( input_velocity_topic_name_ , 1000,
-	                                &CDDynamicsFilter::UpdateDesiredTwist, this, ros::TransportHints().reliable().tcpNoDelay());
+	                                &CDDynamicsTwistFilter::UpdateDesiredTwist, this, ros::TransportHints().reliable().tcpNoDelay());
 	/* Publisher */
 	pub_desired_twist_filtered_ = nh_.advertise<geometry_msgs::Twist>(output_velocity_topic_name_, 1);
 
@@ -102,7 +100,7 @@ bool CDDynamicsFilter::InitializeROS() {
 }
 
 
-void CDDynamicsFilter::Run() {
+void CDDynamicsTwistFilter::Run() {
 
 	while (nh_.ok()) {
 		ros::spinOnce();
@@ -111,7 +109,7 @@ void CDDynamicsFilter::Run() {
 }
 
 
-void CDDynamicsFilter::UpdateDesiredTwist(const geometry_msgs::Twist::ConstPtr& msg) {
+void CDDynamicsTwistFilter::UpdateDesiredTwist(const geometry_msgs::Twist::ConstPtr& msg) {
 
 	msg_desired_twist_ = *msg;
 
@@ -128,7 +126,7 @@ void CDDynamicsFilter::UpdateDesiredTwist(const geometry_msgs::Twist::ConstPtr& 
 
 }
 
-void CDDynamicsFilter::FilterDesiredVelocities() {
+void CDDynamicsTwistFilter::FilterDesiredVelocities() {
 
 	mutex_.lock();
 
@@ -203,7 +201,7 @@ void CDDynamicsFilter::FilterDesiredVelocities() {
 }
 
 
-void CDDynamicsFilter::PublishDesiredVelocities() {
+void CDDynamicsTwistFilter::PublishDesiredVelocities() {
 
 	// msg_desired_twist_filtered_.header.stamp    = ros::Time::now();
 	msg_desired_twist_filtered_.linear.x  = desired_velocity_filtered_lin_(0);

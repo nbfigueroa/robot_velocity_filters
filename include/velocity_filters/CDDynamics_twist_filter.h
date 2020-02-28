@@ -14,8 +14,8 @@
  * Public License for more details
  */
 
-#ifndef __CDDYNAMICS_FILTER_H__
-#define __CDDYNAMICS_FILTER_H__
+#ifndef __CDDYNAMICS_TWIST_FILTER_H__
+#define __CDDYNAMICS_TWIST_FILTER_H__
 
 #include "ros/ros.h"
 #include "geometry_msgs/Pose.h"
@@ -31,7 +31,7 @@
 	with velocity and acceleration limits.  
 
 *******************************************************  */
-class CDDynamicsFilter {
+class CDDynamicsTwistFilter {
 
 
 private:
@@ -54,7 +54,6 @@ private:
 	ros::Subscriber             sub_desired_twist_;
 	ros::Publisher              pub_desired_twist_filtered_;
 
-	std::string                 input_state_topic_name_;
 	std::string                 input_velocity_topic_name_;
 	std::string                 output_velocity_topic_name_;
 
@@ -72,9 +71,8 @@ private:
 
 
 public:
-	CDDynamicsFilter(ros::NodeHandle &n,
+	CDDynamicsTwistFilter(ros::NodeHandle &n,
 	                      	    double frequency,
-						        std::string input_state_topic_name,
 						        std::string input_velocity_topic_name,
 						        std::string output_filtered_velocity_topic_name,
 						        double lin_velocity_limit,
@@ -86,7 +84,6 @@ public:
 private:
 
 	bool InitializeROS();
-	void UpdateCurrentPose(const geometry_msgs::Pose::ConstPtr& msg);
 	void UpdateDesiredTwist(const geometry_msgs::Twist::ConstPtr& msg);
 	void FilterDesiredVelocities();
 	void PublishDesiredVelocities();
