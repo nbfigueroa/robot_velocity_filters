@@ -1,5 +1,5 @@
 # online motion generation
-Set of tools for filtering and generating smooth motion online.
+Set of tools for filtering and generating online motion with first order linear dynamical systems (DS) for translational & angular motion of the EE, as well as joint motion in terms of velocities.
 
 
 ## Installation
