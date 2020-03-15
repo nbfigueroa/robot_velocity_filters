@@ -12,7 +12,7 @@
 	<arg name="output_velocity_topic_name"        default="/UR10arm/desired_joint_velocity"/> -->
 	<arg name="input_velocity_topic_name"         default="/UR10arm/desired_joint_velocity"/>
 	<arg name="output_velocity_topic_name"        default="/arm/joint_group_velocity_controller/command"/>
-	<arg name="joint_velocity_limit"              default="1.0"/>
+	<arg name="joint_velocity_limit"              default="0.85"/>
 
 	<group ns="jointds_filter">
 		<param name="input_velocity_topic_name"   value="$(arg input_velocity_topic_name)"/>

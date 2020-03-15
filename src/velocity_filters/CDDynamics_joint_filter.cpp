@@ -26,7 +26,7 @@ CDDynamicsJointFilter::CDDynamicsJointFilter(ros::NodeHandle &n,
 	  input_velocity_topic_name_(input_velocity_topic_name),
 	  output_velocity_topic_name_(output_velocity_topic_name),
 	  dt_(1 / frequency), Wn_(2.5), M_(6),
-	  filt_vlim_(0.0), filt_alim_(0.0),
+	  filt_vlim_(0.5), filt_alim_(0.0),
 	  joint_velocity_limit_(joint_velocity_limit){
 		
 		ROS_INFO_STREAM("CDDynamics joint velocity filter node is created at: " << nh_.getNamespace() << " with freq: " << frequency << "Hz");

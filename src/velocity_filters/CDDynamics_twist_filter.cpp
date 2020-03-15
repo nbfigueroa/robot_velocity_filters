@@ -26,8 +26,8 @@ CDDynamicsTwistFilter::CDDynamicsTwistFilter(ros::NodeHandle &n,
 	  loop_rate_(frequency),
 	  input_velocity_topic_name_(input_velocity_topic_name),
 	  output_velocity_topic_name_(output_velocity_topic_name),
-	  dt_(1 / frequency), Wn_(50), M_(3),
-	  filt_vlim_(0.0), filt_alim_(0.0),
+	  dt_(1 / frequency), Wn_(2.5), M_(3),
+	  filt_vlim_(0.5), filt_alim_(0.0),
 	  lin_velocity_limit_(lin_velocity_limit), ang_velocity_limit_(ang_velocity_limit){
 		
 		ROS_INFO_STREAM("CDDynamics twist filter node is created at: " << nh_.getNamespace() << " with freq: " << frequency << "Hz");
