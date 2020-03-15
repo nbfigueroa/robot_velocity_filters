@@ -9,8 +9,8 @@
 
 	<arg name="input_velocity_topic_name"        default="/UR10arm/desired_twist"/>
 	<arg name="output_velocity_topic_name"       default="/arm/twist_controller/command_twist"/>
-	<arg name="lin_velocity_limit"               default="0.5"/> 
-	<arg name="ang_velocity_limit"               default="0.5"/>
+	<arg name="lin_velocity_limit"               default="0.3"/> 
+	<arg name="ang_velocity_limit"               default="0.3"/>
 	<!-- <arg name="input_velocity_topic_name"        default="/arm/twist_controller/command_twist"/>
 	<arg name="output_velocity_topic_name"       default="/UR10arm/desired_twist"/> -->
 
