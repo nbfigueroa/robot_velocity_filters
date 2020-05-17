@@ -22,3 +22,10 @@ $ rosdep install --from-paths . --ignore-src --rosdistro indigo
 
 
 ## Usage
+
+---
+## Contact
+Maintainer: [Nadia Figueroa](https://nbfigueroa.github.io/) (nadiafig @ mit dot edu)
+
+## License
+- This code is released under MIT license. 
