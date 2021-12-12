@@ -1,9 +1,4 @@
 - git:
-    local-name: quatDS
-    uri: https://github.com/nbfigueroa/quatDS-lib.git
-    version: master
-
-- git:
     local-name: mathlib
     uri: git@github.com:epfl-lasa/mathlib.git
     
