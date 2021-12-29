@@ -1,5 +1,5 @@
 # robot velocity filters
-Set of tools for filtering desires twist of the EE, as well as joint velocities with a second order dynamics.
+Set of tools for filtering desired twist of the EE, as well as joint velocities with a second order dynamics.
 
 
 ## Installation
